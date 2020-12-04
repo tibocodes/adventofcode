@@ -21,7 +21,7 @@ struct Card {
 
 // Exo 1
 fn main() -> std::io::Result<()> {
-    let f = File::open("example2")?;
+    let f = File::open("input")?;
     let f = BufReader::new(f);
     let mut valid = 0;
 
@@ -136,6 +136,28 @@ fn check_field(field_name: String, field_value: String) -> bool {
         "hcl" => {
             // println!("check match byr");
             let re = Regex::new(r"#[\w\d]{6}").unwrap();
+            if !re.is_match(&field_value) {
+                println!("{}", field_value);
+                println!("not match");
+                return false;
+            }
+            println!("{}", field_value);
+            println!("match");
+        },
+        "ecl" => {
+            // println!("check match byr");
+            let re = Regex::new(r"amb|blu|brn|gry|grn|hzl|oth").unwrap();
+            if !re.is_match(&field_value) {
+                println!("{}", field_value);
+                println!("not match");
+                return false;
+            }
+            println!("{}", field_value);
+            println!("match");
+        },
+        "pid" => {
+            // println!("check match byr");
+            let re = Regex::new(r"\d{9}").unwrap();
             if !re.is_match(&field_value) {
                 println!("{}", field_value);
                 println!("not match");
