@@ -133,6 +133,17 @@ fn check_field(field_name: String, field_value: String) -> bool {
             
             println!("match");
         },
+        "hcl" => {
+            // println!("check match byr");
+            let re = Regex::new(r"#[\w\d]{6}").unwrap();
+            if !re.is_match(&field_value) {
+                println!("{}", field_value);
+                println!("not match");
+                return false;
+            }
+            println!("{}", field_value);
+            println!("match");
+        },
         _ => println!("field not implemented"),
     }
     // println!("match");
