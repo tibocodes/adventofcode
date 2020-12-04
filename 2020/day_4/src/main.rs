@@ -21,11 +21,11 @@ struct Card {
 
 // Exo 1
 fn main() -> std::io::Result<()> {
-    let f = File::open("input")?;
+    let f = File::open("example2")?;
     let f = BufReader::new(f);
     let mut valid = 0;
 
-    let re = Regex::new(r"(\w{3}):\S+").unwrap();
+    let re = Regex::new(r"(\w{3}):(\S+)").unwrap();
 
     let mut card: HashMap<String, bool> = new_card();
     for line in f.lines() {
@@ -38,7 +38,9 @@ fn main() -> std::io::Result<()> {
             continue
         }
         for cap in re.captures_iter(&line) {
-            card.insert((&cap[1]).to_string(), true);
+            if check_field(cap[1].to_string(), cap[2].to_string()) {
+                card.insert((&cap[1]).to_string(), true);
+            }
         }
     }
     println!("{}", valid);
@@ -52,6 +54,88 @@ fn valid_card(card: HashMap<String, bool>) -> bool {
             return false;
         }
     }
+    return true;
+}
+
+fn check_field(field_name: String, field_value: String) -> bool {
+    // println!("check field");
+    match field_name.as_ref() {
+        "byr" => {
+            // println!("check match byr");
+            let re = Regex::new(r"(\d{4})").unwrap();
+            if !re.is_match(&field_value) {
+                println!("{}", field_value);
+                println!("not match");
+                return false;
+            }
+            println!("{}", field_value);
+            let val: u32 = field_value.parse().unwrap();
+            if val < 1920 || val > 2002 {
+                println!("not match");
+                return false;
+            }
+            println!("match");
+        },
+        "iyr" => {
+            // println!("check match byr");
+            let re = Regex::new(r"(\d{4})").unwrap();
+            if !re.is_match(&field_value) {
+                println!("{}", field_value);
+                println!("not match");
+                return false;
+            }
+            println!("{}", field_value);
+            let val: u32 = field_value.parse().unwrap();
+            if val < 2010 || val > 2020 {
+                println!("not match");
+                return false;
+            }
+            println!("match");
+        },
+        "eyr" => {
+            // println!("check match byr");
+            let re = Regex::new(r"(\d{4})").unwrap();
+            if !re.is_match(&field_value) {
+                println!("{}", field_value);
+                println!("not match");
+                return false;
+            }
+            println!("{}", field_value);
+            let val: u32 = field_value.parse().unwrap();
+            if val < 2020 || val > 2030 {
+                println!("not match");
+                return false;
+            }
+            println!("match");
+        },
+        "hgt" => {
+            // println!("check match byr");
+            let re = Regex::new(r"(\d{2,3})(cm|in)").unwrap();
+            if !re.is_match(&field_value) {
+                println!("{}", field_value);
+                println!("not match");
+                return false;
+            }
+            println!("{}", field_value);
+            let caps = re.captures(&field_value).unwrap();
+            let val: u32 = caps.get(1).unwrap().as_str().parse().unwrap();
+            if caps.get(2).unwrap().as_str() == "cm" {
+                if val < 150 || val > 193 {
+                    println!("not match");
+                    return false;
+                }
+            } else {
+                if val < 59 || val > 76 {
+                    println!("not match");
+                    return false;
+                }
+            }
+            
+            println!("match");
+        },
+        _ => println!("field not implemented"),
+    }
+    // println!("match");
     return true;
 }
 
