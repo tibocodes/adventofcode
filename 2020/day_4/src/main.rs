@@ -6,8 +6,6 @@ use regex::Regex;
 use std::collections::HashMap;
 
 
-// Exo 1
-
 struct Card {
     byr: bool,
     iyr: bool,
@@ -38,12 +36,13 @@ fn main() -> std::io::Result<()> {
             continue
         }
         for cap in re.captures_iter(&line) {
+            // Exo 2, remove for exo 1
             if check_field(cap[1].to_string(), cap[2].to_string()) {
                 card.insert((&cap[1]).to_string(), true);
             }
         }
     }
-    // println!("{}", valid);
+    println!("{}", valid);
     Ok(())
 }
 
@@ -58,122 +57,76 @@ fn valid_card(card: HashMap<String, bool>) -> bool {
 }
 
 fn check_field(field_name: String, field_value: String) -> bool {
-    // println!("check field");
     match field_name.as_ref() {
         "byr" => {
-            // println!("check match byr");
             let re = Regex::new(r"(\d{4})").unwrap();
             if !re.is_match(&field_value) {
-                // println!("{}", field_value);
-                // println!("not match");
                 return false;
             }
-            // println!("{}", field_value);
             let val: u32 = field_value.parse().unwrap();
             if val < 1920 || val > 2002 {
-                // println!("not match");
                 return false;
             }
-            println!("{}", field_value);
-            println!("match");
         },
         "iyr" => {
-            // println!("check match byr");
             let re = Regex::new(r"(\d{4})").unwrap();
             if !re.is_match(&field_value) {
-                // println!("{}", field_value);
-                // println!("not match");
                 return false;
             }
-            // println!("{}", field_value);
             let val: u32 = field_value.parse().unwrap();
             if val < 2010 || val > 2020 {
-                // println!("not match");
                 return false;
             }
-            // println!("match");
         },
         "eyr" => {
-            // println!("check match byr");
             let re = Regex::new(r"(\d{4})").unwrap();
             if !re.is_match(&field_value) {
-                // println!("{}", field_value);
-                // println!("not match");
                 return false;
             }
-            // println!("{}", field_value);
             let val: u32 = field_value.parse().unwrap();
             if val < 2020 || val > 2030 {
-                // println!("not match");
                 return false;
             }
-            // println!("match");
         },
         "hgt" => {
-            // println!("check match byr");
             let re = Regex::new(r"(\d{2,3})(cm|in)").unwrap();
             if !re.is_match(&field_value) {
-                // println!("{}", field_value);
-                // println!("not match");
                 return false;
             }
-            // println!("{}", field_value);
             let caps = re.captures(&field_value).unwrap();
             let val: u32 = caps.get(1).unwrap().as_str().parse().unwrap();
             if caps.get(2).unwrap().as_str() == "cm" {
                 if val < 150 || val > 193 {
-                    // println!("not match");
                     return false;
                 }
             } else {
                 if val < 59 || val > 76 {
-                    // println!("not match");
                     return false;
                 }
             }
-            
-            // println!("match");
         },
         "hcl" => {
-            // println!("check match byr");
             let re = Regex::new(r"#([0-9]|[a-f]){6}").unwrap();
             if !re.is_match(&field_value) {
-                // println!("{}", field_value);
-                // println!("not match");
                 return false;
             }
-            // println!("{}", field_value);
-            // println!("match");
         },
         "ecl" => {
-            // println!("check match byr");
             let re = Regex::new(r"amb|blu|brn|gry|grn|hzl|oth").unwrap();
             if !re.is_match(&field_value) {
-                // println!("{}", field_value);
-                // println!("not match");
                 return false;
             }
-            // println!("{}", field_value);
-            // println!("match");
         },
         "pid" => {
-            // println!("check match byr");
-            let re = Regex::new(r"\d{9}").unwrap();
+            let re = Regex::new(r"^\d{9}$").unwrap();
             if !re.is_match(&field_value) {
-                // println!("{}", field_value);
-                // println!("not match");
                 return false;
             }
-            // println!("{}", field_value);
-            // println!("match");
         },
-        // "cid" => println!("cid ok"),
         _ => {
-            // println!("field not implemented");
             return false;
         },
     }
-    // println!("match");
     return true;
 }
 
