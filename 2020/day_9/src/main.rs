@@ -16,12 +16,14 @@ use std::fs::File;
 // }
 
 // Exo2
-// brute force, should at least opt out of loop when the sum is already > to the expected result
 fn main() {
     let values = values();
     for (i, _) in values.iter().enumerate() {
         for (j, _) in values[i..].iter().enumerate() {
             let sum: u64 = values[i..(i + j)].iter().sum();
+            if sum > 756008079 {
+                break
+            }
             if sum == 756008079 {
                 let min = values[i..(i + j)].iter().min().unwrap();
                 let max = values[i..(i + j)].iter().max().unwrap();
