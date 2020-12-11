@@ -64,6 +64,7 @@ fn droppable_values(input: Vec<u32>) -> u32 {
     }
     println!("droppable values: {}", res);
     // je reconnais une somme de coefficients binomiaux
+    // faux: je devrais etre capable de resoudre ça avec un algo DP
     println!("2 puissance {}: {}", res, u32::pow(2, res));
     return res;
 }
