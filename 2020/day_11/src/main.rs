@@ -21,7 +21,8 @@ fn main() {
     for i in 0..rows {
         for j in 0..cols {
             // print!("{}", seat);
-            print!("{}", adjacent_seats(&mut plan, i, j));
+            // print!("{}", adjacent_seats(&mut plan, i, j));
+            print!("{}", visible_seats(&mut plan, i, j));
         }
         println!("");
     }
@@ -65,10 +66,12 @@ fn transform(plan: &mut Vec<Vec<char>>) -> (bool, Vec<Vec<char>>) {
     for i in 0..rows {
         let mut new_row = Vec::new();
         for j in 0..cols {
-           if plan[i][j] == 'L' && adjacent_seats(plan, i, j) == 0 {
+        //    if plan[i][j] == 'L' && adjacent_seats(plan, i, j) == 0 {
+           if plan[i][j] == 'L' && visible_seats(plan, i, j) == 0 {
                new_row.push('#');
                changes = true;
-           } else if plan[i][j] == '#' && adjacent_seats(plan, i, j) >= 4 {
+        //    } else if plan[i][j] == '#' && adjacent_seats(plan, i, j) >= 4 {
+           } else if plan[i][j] == '#' && visible_seats(plan, i, j) >= 5 {
                changes = true;
                new_row.push('L');
            } else {
@@ -112,6 +115,149 @@ fn adjacent_seats(plan: &mut Vec<Vec<char>>, row: usize, col: usize) -> usize {
         }
     }
     return occupied;
+}
+
+fn visible_seats(plan: &mut Vec<Vec<char>>, row: usize, col: usize) -> usize {
+    let mut visible = 0;
+    // let row: isize = row as isize;
+    // let col: isize = col as isize;
+    let rows = plan.len();
+    let cols = plan[0].len();
+
+    // vertical
+    // left
+    for j in (0..col).rev() {
+        if plan[row][j] == 'L' {
+            break;
+        }
+        if plan[row][j] == '#' {
+            visible += 1;
+            break;
+        }
+
+    }
+    // right
+    for j in col + 1..cols {
+        if plan[row][j] == 'L' {
+            break;
+        }
+        if plan[row][j] == '#' {
+            visible += 1;
+            break;
+        }
+
+    }
+    // horizontal
+    // up
+    for i in (0..row).rev() {
+        if plan[i][col] == 'L' {
+            break;
+        }
+        if plan[i][col] == '#' {
+            visible += 1;
+            break;
+        }
+
+    }
+    // down
+    for i in row + 1..rows {
+        if plan[i][col] == 'L' {
+            break;
+        }
+        if plan[i][col] == '#' {
+            visible += 1;
+            break;
+        }
+
+    }
+    // diagonal top left
+    let mut i = row as isize;
+    let mut j = col as isize;
+    let mut first = true;
+    while i >= 0 && i < plan.len() as isize && j >= 0 && j < plan[0].len() as isize {
+        if first == true {
+            first = false;
+            i = i - 1;
+            j = j - 1;
+            continue;
+        }
+        if plan[i as usize][j as usize] == 'L' {
+            break;
+        }
+        if plan[i as usize][j as usize] == '#' {
+            visible += 1;
+            break;
+        }
+        i = i - 1;
+        j = j - 1;
+    }
+    // diagonal top right
+    let mut i = row as isize;
+    let mut j = col as isize;
+    let mut first = true;
+    while i >= 0 && i < plan.len() as isize && j >= 0 && j < plan[0].len() as isize {
+        if first == true {
+            first = false;
+            i = i - 1;
+            j = j + 1;
+            continue;
+        }
+        if plan[i as usize][j as usize] == 'L' {
+            break;
+        }
+        if plan[i as usize][j as usize] == '#' {
+            visible += 1;
+            break;
+        }
+        i = i - 1;
+        j = j + 1;
+    }
+    // diagonal bot left
+    let mut i = row as isize;
+    let mut j = col as isize;
+    let mut first = true;
+    while i >= 0 && i < plan.len() as isize && j >= 0 && j < plan[0].len() as isize {
+        if first == true {
+            first = false;
+            i = i + 1;
+            j = j - 1;
+            continue;
+        }
+        if plan[i as usize][j as usize] == 'L' {
+            break;
+        }
+        if plan[i as usize][j as usize] == '#' {
+            visible += 1;
+            break;
+        }
+        i = i + 1;
+        j = j - 1;
+    }
+    // diagonal bot right
+    let mut i = row as isize;
+    let mut j = col as isize;
+    let mut first = true;
+    while i >= 0 && i < plan.len() as isize && j >= 0 && j < plan[0].len() as isize {
+        if first == true {
+            first = false;
+            i = i + 1;
+            j = j + 1;
+            continue;
+        }
+        if plan[i as usize][j as usize] == 'L' {
+            break;
+        }
+        if plan[i as usize][j as usize] == '#' {
+            visible += 1;
+            break;
+        }
+        i = i + 1;
+        j = j + 1;
+    }
+
+
+    // println!("visible: {}", visible);
+    return visible;
 }
 
 fn values() -> Vec<Vec<char>> {
